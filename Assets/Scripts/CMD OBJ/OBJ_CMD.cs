@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
 using Unity.VisualScripting;
@@ -7,11 +8,13 @@ using UnityEngine.UI;
 
 public class OBJ_CMD : NPC
 {
-    int index = 0;
+    // Add elements to the Inspector
+    [SerializeReference]
+    [SubclassSelector]
+    public List<QA> QAs = new List<QA>();
 
-    public QA[] QAs;
-    public int score;
-
+    // Don't touch it
+    private int score;
 
     public new void Start()
     {
@@ -19,6 +22,7 @@ public class OBJ_CMD : NPC
     }
 
     public async override void Interact() {
+        //ReadyQuiz(); // ask before proceeding
         await QuizTime();
     }
 
@@ -26,10 +30,43 @@ public class OBJ_CMD : NPC
      * 
      * SetMultipleQuestion() : ChooseAnswer()
      * SetIdentifyQuestion() : IdentifyAnswer()
-     * SetTriviaQuestion() : FactAnswer()
+     * SetTriviaQuestion()   : FactAnswer()
      * 
      * 
      */
+
+    public Task ReadyQuiz()
+    {
+        Canvas player = GameObject.FindGameObjectWithTag("Canvas_Player").GetComponent<Canvas>();
+        player.enabled = false;
+
+        Canvas readypage = GameObject.Find("Terminal Ready").GetComponent<Canvas>();
+        readypage.enabled = true;
+
+        Button buttonReady = readypage.transform.Find("Button Ready").GetComponent<Button>();
+        Button buttonClose = readypage.transform.Find("Button Close").GetComponent<Button>();
+
+        buttonReady.onClick.AddListener( async () => { await StartQuiz(); } );
+        buttonClose.onClick.AddListener( async () => { await CloseQuiz(); });
+        return Task.CompletedTask;
+    }
+
+    // working below
+    public Task CloseQuiz()
+    {
+        Canvas readypage = GameObject.Find("Terminal Ready").GetComponent<Canvas>();
+        readypage.enabled = false;
+        Canvas player = GameObject.FindGameObjectWithTag("Canvas_Player").GetComponent<Canvas>();
+        player.enabled = true;
+        return Task.CompletedTask;
+    }
+
+    public async Task StartQuiz() {
+        Canvas readypage = GameObject.Find("Terminal Ready").GetComponent<Canvas>();
+        readypage.enabled = false;
+        await QuizTime();
+    }
+    // working above
 
     // Starting a quiz
     public async Task QuizTime()
@@ -66,8 +103,8 @@ public class OBJ_CMD : NPC
         }
 
         animator.SetBool("isAnswering", false);
-        //Debug.Log(score >= (QAs.Length / 2));
-        animator.SetBool("isPassed", this.score >= (QAs.Length / 2));
+        //Debug.Log(score >= (QAs.Count / 2));
+        animator.SetBool("isPassed", this.score > (QAs.Count / 2));
 
         ShowResult();
 
@@ -81,7 +118,7 @@ public class OBJ_CMD : NPC
         res.enabled = true;
 
         TMP_InputField grade = res.transform.Find("Result Score").GetComponent<TMP_InputField>();
-        grade.text = $"{score}/{QAs.Length}";
+        grade.text = $"{score}/{QAs.Count}";
 
         Button done = res.transform.Find("Button Done").GetComponent<Button>();
         done.onClick.AddListener(DoneResult);
@@ -94,7 +131,7 @@ public class OBJ_CMD : NPC
         player.enabled = true;
     }
 
-    // forgot what it is but it looks important for later...
+    // forgot what it is but it looks important for later... unused and unaffected
     //IEnumerator RevealAnswer() {
     //    yield return new WaitForSeconds(5.0f);
     //    Debug.Log("Finised");
@@ -177,7 +214,7 @@ public class OBJ_CMD : NPC
         if (((Trivia)qa).AnswerFact(ans))
         {
             score++;
-            if (qa.savedAnswer == "true")       bt.GetComponent<Image>().color = Color.green;
+            if      (qa.savedAnswer == "true")  bt.GetComponent<Image>().color = Color.green;
             else if (qa.savedAnswer == "false") bf.GetComponent<Image>().color = Color.green;
         } else {
             if (qa.savedAnswer == "true") {
@@ -219,7 +256,6 @@ public class OBJ_CMD : NPC
             string text = GameObject.Find("Identify Answer").GetComponent<TMP_InputField>().text;
             GameObject.Find("Submit Answer").GetComponent<Button>().onClick.RemoveAllListeners();
             buttonClickTask.SetResult(text);
-
         }
         GameObject.Find("Submit Answer").GetComponent<Button>().onClick.AddListener(() => OnClick(GameObject.Find("Submit Answer").GetComponent<Button>()));
         return buttonClickTask.Task;
@@ -234,7 +270,6 @@ public class OBJ_CMD : NPC
             GameObject.Find("True Answer").GetComponent<Button>().onClick.RemoveAllListeners();
             GameObject.Find("False Answer").GetComponent<Button>().onClick.RemoveAllListeners();
             buttonClickTask.SetResult(btn.GetComponentInChildren<TMP_Text>().text);
-
         }
         GameObject.Find("True Answer").GetComponent<Button>().onClick.AddListener(() => OnClick(GameObject.Find("True Answer").GetComponent<Button>()));
         GameObject.Find("False Answer").GetComponent<Button>().onClick.AddListener(() => OnClick(GameObject.Find("False Answer").GetComponent<Button>()));
