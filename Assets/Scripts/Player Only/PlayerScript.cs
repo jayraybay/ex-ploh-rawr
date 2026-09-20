@@ -19,7 +19,8 @@ public class PlayerInteract : MonoBehaviour
     // <!Static>
     public static Button UI_INTERACT;
     public static TMP_InputField UI_DIALOGUE;
-
+    public static Image UI_JOYSTICK;
+    public static Camera PLAYER_CAMERA;
     // </Static>
 
 
@@ -42,20 +43,9 @@ public class PlayerInteract : MonoBehaviour
         animator = transform.GetChild(1).GetComponent<Animator>();
        
 
-        if (GENDER == "M")
-        {
-            Debug.Log("MALE!!");
-            animator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Animations/PlayerMale_Controller");
-        }
-        else if (GENDER == "F")
-        {
-            Debug.Log("FEMALE!!");
-            animator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Animations/PlayerFemale_Controller");
-        }
-        else {
-            Debug.Log("NONBINARY!!");
-            animator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Animations/PlayerNonbinary_Controller");
-        }
+             if (GENDER == "M") animator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Animations/PlayerMale_Controller");      //Debug.Log("MALE!!");
+        else if (GENDER == "F") animator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Animations/PlayerFemale_Controller");    //Debug.Log("FEMALE!!");
+        else                    animator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Animations/PlayerNonbinary_Controller"); //Debug.Log("NONBINARY!!");
 
 
         float x = PlayerPrefs.GetFloat("PlayerX");
@@ -70,7 +60,8 @@ public class PlayerInteract : MonoBehaviour
 
         PlayerInteract.UI_INTERACT = buttonInteract;
         PlayerInteract.UI_DIALOGUE = inputField;
-
+        PlayerInteract.UI_JOYSTICK = GameObject.FindGameObjectWithTag("UI_Joystick").GetComponent<Image>();
+        PlayerInteract.PLAYER_CAMERA = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
 
         //GameObject.FindGameObjectWithTag("Canvas_Terminal").GetComponent<Canvas>().enabled = false;
         GameObject.Find("Terminal Multiple").GetComponent<Canvas>().enabled = false;
@@ -85,6 +76,7 @@ public class PlayerInteract : MonoBehaviour
 
     void Update()
     {
+        transform.Find("Player Sprite").GetComponent<SpriteRenderer>().transform.rotation = Quaternion.LookRotation(PLAYER_CAMERA.transform.forward);
         CharacterMove();
         //Debug.Log(target);
     }
@@ -118,12 +110,14 @@ public class PlayerInteract : MonoBehaviour
     {
         if (hasTriggered) return;
         hasTriggered = true;
+        //Debug.Log(other);
 
         if (other.gameObject.CompareTag("NPC") && target == null)
         {
             target = other.gameObject;
             //Debug.Log(target.name);
             NPCscript = target.GetComponent<NPC>();
+            if (target.GetComponent<NPC>() != null) NPCscript = target.GetComponent<NPC>();
             buttonInteract.onClick.AddListener(NPCscript.Interact);
             buttonInteract.interactable = true;
         }
@@ -134,7 +128,7 @@ public class PlayerInteract : MonoBehaviour
         target = null;
         buttonInteract.interactable = false;
 
-        buttonInteract.onClick.RemoveListener(NPCscript.Interact);
+        if (NPCscript != null) buttonInteract.onClick.RemoveListener(NPCscript.Interact);
         NPCscript = null;
         hasTriggered = false;
 

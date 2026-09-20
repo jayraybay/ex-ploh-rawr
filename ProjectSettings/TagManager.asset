@@ -11,6 +11,7 @@ TagManager:
   - UI_Dialogue
   - Canvas_Terminal
   - Canvas_Player
+  - Canvas_Terminal_Ready
   layers:
   - Default
   - TransparentFX

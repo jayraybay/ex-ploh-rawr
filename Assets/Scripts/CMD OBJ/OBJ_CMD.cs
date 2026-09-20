@@ -21,6 +21,10 @@ public class OBJ_CMD : NPC
         isEntity = false;
     }
 
+    public new void Update() {
+        transform.Find("Square").GetComponent<SpriteRenderer>().transform.rotation = Quaternion.LookRotation(PlayerInteract.PLAYER_CAMERA.transform.forward);
+    }
+
     public async override void Interact() {
         //ReadyQuiz(); // ask before proceeding
         await QuizTime();

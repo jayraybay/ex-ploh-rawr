@@ -29,7 +29,7 @@ public abstract class QA
 {
     public string QUESTION;
     public string ANSWER;
-    public string savedAnswer;
+    public string savedAnswer; // dont use in the Inspector
 
     public virtual bool Answer(string answer) {
         this.savedAnswer = answer;
@@ -77,17 +77,15 @@ public class MultipleChoices : QA
     }
 }
 
-
 [Serializable]
 public class Trivia : QA {
-    public bool isFact;
+    private bool isFact; // unused in Inspector
     public Trivia() {}
     public Trivia(string question, bool trueOrFalse) {
         this.QUESTION = question;
         this.isFact = trueOrFalse;
         base.ANSWER = isFact.ToString().ToLower();
     }
-
     public bool AnswerFact(bool answer) {
         return Answer(answer.ToString());
     }
@@ -105,8 +103,7 @@ public class Trivia : QA {
 [Serializable]
 public class Identify : QA
 {
-    
-    bool isCaseSensitive;
+    public bool isCaseSensitive;
 
     public Identify() {}
     public Identify(string question, string answer, bool isCaseSensitive)

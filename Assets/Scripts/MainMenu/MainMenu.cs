@@ -19,15 +19,12 @@ public class MainMenu : MonoBehaviour
         string gender = PlayerPrefs.GetString("PlayerGender");
         Animator animator = transform.GetChild(8).GetComponent<Animator>();
 
-        if      (gender == "M") animator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Animations/PlayerMale_Controller");
+             if (gender == "M") animator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Animations/PlayerMale_Controller");
         else if (gender == "F") animator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Animations/PlayerFemale_Controller");
         else                    animator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Animations/PlayerNonbinary_Controller");
     }
     
-    void Update()
-    {
-        
-    }
+    void Update(){}
 
     void Awake()
     {
