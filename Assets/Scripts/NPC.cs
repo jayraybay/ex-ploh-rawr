@@ -17,7 +17,7 @@ public class NPC : MonoBehaviour
     public SpriteRenderer npcSprite;
     public AnimatorController animatorController;
     public Animator animator; // unused in Inspector
-    private string currentMsg; // when currently in dialogue
+    private string currentMsg; // when currently in dialogue; null means not in dialogue
 
     public void Start()
     {

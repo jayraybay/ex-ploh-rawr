@@ -25,38 +25,45 @@ public class OBJ_CMD : NPC
         transform.Find("Square").GetComponent<SpriteRenderer>().transform.rotation = Quaternion.LookRotation(PlayerInteract.PLAYER_CAMERA.transform.forward);
     }
 
+   TaskCompletionSource<bool> quizRespond = new TaskCompletionSource<bool>();
+
     public async override void Interact() {
-        //ReadyQuiz(); // ask before proceeding
-        await QuizTime();
-    }
 
-    /**
-     * 
-     * SetMultipleQuestion() : ChooseAnswer()
-     * SetIdentifyQuestion() : IdentifyAnswer()
-     * SetTriviaQuestion()   : FactAnswer()
-     * 
-     * 
-     */
-
-    public Task ReadyQuiz()
-    {
         Canvas player = GameObject.FindGameObjectWithTag("Canvas_Player").GetComponent<Canvas>();
         player.enabled = false;
-
         Canvas readypage = GameObject.Find("Terminal Ready").GetComponent<Canvas>();
         readypage.enabled = true;
-
         Button buttonReady = readypage.transform.Find("Button Ready").GetComponent<Button>();
         Button buttonClose = readypage.transform.Find("Button Close").GetComponent<Button>();
+        // buttonReady.onClick.AddListener( () => { Debug.Log("Ready!"); });
+        // buttonClose.onClick.AddListener( () => { Debug.Log("Close!"); });
 
-        buttonReady.onClick.AddListener( async () => { await StartQuiz(); } );
-        buttonClose.onClick.AddListener( async () => { await CloseQuiz(); });
-        return Task.CompletedTask;
+        bool isReady = await ReadyQuiz(); // ask before proceeding
+        if (isReady)
+        {
+            await CloseReady();
+            await QuizTime(); // take the quiz
+        }
+        else {
+            await CloseReady();
+        }
+    }  
+
+    public Task<bool> ReadyQuiz()
+    {
+        quizRespond = new TaskCompletionSource<bool>();
+        void OnClick(Button btn) {
+            GameObject.Find("Button Ready").GetComponent<Button>().onClick.RemoveAllListeners();
+            GameObject.Find("Button Close").GetComponent<Button>().onClick.RemoveAllListeners();
+            if (btn.GetComponentInChildren<TMP_Text>().text == "START") quizRespond.SetResult(true);
+            else                                                        quizRespond.SetResult(false);
+        }
+        GameObject.Find("Button Ready").GetComponent<Button>().onClick.AddListener(() => OnClick(GameObject.Find("Button Ready").GetComponent<Button>()));
+        GameObject.Find("Button Close").GetComponent<Button>().onClick.AddListener(() => OnClick(GameObject.Find("Button Close").GetComponent<Button>()));
+        return quizRespond.Task;
     }
 
-    // working below
-    public Task CloseQuiz()
+    public Task CloseReady()
     {
         Canvas readypage = GameObject.Find("Terminal Ready").GetComponent<Canvas>();
         readypage.enabled = false;
@@ -65,14 +72,15 @@ public class OBJ_CMD : NPC
         return Task.CompletedTask;
     }
 
-    public async Task StartQuiz() {
-        Canvas readypage = GameObject.Find("Terminal Ready").GetComponent<Canvas>();
-        readypage.enabled = false;
-        await QuizTime();
-    }
-    // working above
+    /**
+     * Don't get lost, here's this and that
+     *  SetMultipleQuestion() : ChooseAnswer()
+     *  SetIdentifyQuestion() : IdentifyAnswer()
+     *  SetTriviaQuestion()   : FactAnswer()
+     * 
+     */
 
-    // Starting a quiz
+    // Starting the quiz
     public async Task QuizTime()
     {
         score = 0;
@@ -123,6 +131,9 @@ public class OBJ_CMD : NPC
 
         TMP_InputField grade = res.transform.Find("Result Score").GetComponent<TMP_InputField>();
         grade.text = $"{score}/{QAs.Count}";
+
+        TMP_InputField state = res.transform.Find("Result State").GetComponent<TMP_InputField>();
+        state.text = (this.score > (QAs.Count / 2)) ? ("PASSED") : ("FAILED");
 
         Button done = res.transform.Find("Button Done").GetComponent<Button>();
         done.onClick.AddListener(DoneResult);
@@ -184,7 +195,7 @@ public class OBJ_CMD : NPC
 
     public async Task SetIdentifyQuestion(QA qa) {
         Canvas ui = GameObject.Find("Terminal Identify").GetComponent<Canvas>();
-        Debug.Log(ui.name);
+        //Debug.Log(ui.name);
         ui.enabled = true;
 
         TMP_InputField question = ui.transform.Find("Question").GetComponent<TMP_InputField>();
