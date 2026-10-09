@@ -17,7 +17,7 @@ using UnityEngine;
  * D+ : 
  * D  : 
  * D- : 
- * F  : 60%
+ * F  : 70%
  * 
  * 
  * 
