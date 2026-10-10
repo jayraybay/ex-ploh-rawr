@@ -239,13 +239,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 7152496488731449613}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1d1d210e070d94b4babb052f8333e8a5, type: 3}
+  m_Script: {fileID: 11500000, guid: d1760550e1fe02349ad3c46a70ba49f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExplainerInteract
   isEntity: 1
+  canSkip: 0
   npcSprite: {fileID: 3302971511590771972}
   animatorController: {fileID: 9100000, guid: 4d9825f7a35cedf449abd22fe415a69c, type: 2}
-  animator: {fileID: 0}
+  animator: {fileID: 6092015714938018670}
   dialogue:
   - Hello there, try solving those terminals to proceed.
   - If you ever failed, you can try again.
