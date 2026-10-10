@@ -1,4 +1,3 @@
-// Define the interface
 using System;
 using System.Collections;
 using TMPro;
@@ -76,5 +75,4 @@ public class NPC : MonoBehaviour
         PlayerInteract.UI_INTERACT.gameObject.SetActive(true);
         PlayerInteract.UI_JOYSTICK.gameObject.SetActive(true);
     }
-
 }

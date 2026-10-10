@@ -184,10 +184,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OBJ_CMD
   isEntity: 0
+  canSkip: 0
   npcSprite: {fileID: 0}
   animatorController: {fileID: 0}
   animator: {fileID: 5262474850235155306}
-  QAs: []
+  QAs:
+  - rid: 5879418002965790787
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 5879418002965790787
+      type: {class: MultipleChoices, ns: , asm: Assembly-CSharp}
+      data:
+        QUESTION: 
+        ANSWER: 
+        savedAnswer: 
+        choices: []

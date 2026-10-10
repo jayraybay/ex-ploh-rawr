@@ -141,17 +141,18 @@ public class PlayerInteract : MonoBehaviour
     }
 
 
-    public void ForceSpeak(string msg) {
+    // Unused, but can be used when needed ATM
+    public static void ForceSpeak(string msg) {
         PlayerInteract.UI_DIALOGUE.text = msg;
     }
 
-    public void ToggleInteraction(bool here) {
+    // Joystick Movement and Interact Button
+    public static void ToggleControls(bool here) {
+        PlayerInteract.UI_JOYSTICK.gameObject.SetActive(here);
         PlayerInteract.UI_INTERACT.gameObject.SetActive(here);
     }
 
-    public void TogglePlayerUI(bool here) {
-        
-    }
+    
 
 
 }
