@@ -148,7 +148,11 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
 <<<<<<< HEAD
+<<<<<<< HEAD
   m_LocalPosition: {x: 0.44, y: 0, z: 0}
+=======
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+>>>>>>> parent of eeda85a (Ready Page + Pass/Fail Result)
 =======
   m_LocalPosition: {x: 0, y: 0, z: 0}
 >>>>>>> parent of eeda85a (Ready Page + Pass/Fail Result)
@@ -4122,6 +4126,7 @@ Transform:
   m_Father: {fileID: 1432877266}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 <<<<<<< HEAD
+<<<<<<< HEAD
 --- !u!1001 &971779327
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4260,6 +4265,8 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 43a73d7b222daa04b882e16b7615cd02, type: 3}
+=======
+>>>>>>> parent of eeda85a (Ready Page + Pass/Fail Result)
 =======
 >>>>>>> parent of eeda85a (Ready Page + Pass/Fail Result)
 --- !u!1 &1002812097
@@ -5784,7 +5791,11 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
 <<<<<<< HEAD
+<<<<<<< HEAD
   m_text: "\u200B"
+=======
+  m_text: "S+\u200B"
+>>>>>>> parent of eeda85a (Ready Page + Pass/Fail Result)
 =======
   m_text: "S+\u200B"
 >>>>>>> parent of eeda85a (Ready Page + Pass/Fail Result)
@@ -9317,6 +9328,9 @@ MonoBehaviour:
 =======
   m_SelectionColor: {r: 0.65882355, g: 0.80784315, b: 1, a: 0}
   m_Text: S+
+<<<<<<< HEAD
+>>>>>>> parent of eeda85a (Ready Page + Pass/Fail Result)
+=======
 >>>>>>> parent of eeda85a (Ready Page + Pass/Fail Result)
   m_CaretBlinkRate: 0.85
   m_CaretWidth: 1
