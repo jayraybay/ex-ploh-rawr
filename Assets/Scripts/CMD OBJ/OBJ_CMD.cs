@@ -8,13 +8,23 @@ using UnityEngine.UI;
 
 public class OBJ_CMD : NPC
 {
-    // Add elements to the Inspector
+    // Inspector elements
+    public bool isTimed = false;
+
+    /*
+        When Timed:
+            Choices = 7.5s
+            Identify = 10s
+            Fact = 5s
+     */
+
+
     [SerializeReference]
     [SubclassSelector]
     public List<QA> QAs = new List<QA>();
 
     // Don't touch it
-    private int score;
+    public int score = 0;
 
     public new void Start()
     {
@@ -35,8 +45,13 @@ public class OBJ_CMD : NPC
         readypage.enabled = true;
         Button buttonReady = readypage.transform.Find("Button Ready").GetComponent<Button>();
         Button buttonClose = readypage.transform.Find("Button Close").GetComponent<Button>();
-        // buttonReady.onClick.AddListener( () => { Debug.Log("Ready!"); });
-        // buttonClose.onClick.AddListener( () => { Debug.Log("Close!"); });
+
+        TMP_Text count = readypage.transform.Find("Count Value").GetComponent<TMP_Text>();
+        TMP_Text timed = readypage.transform.Find("Timed Value").GetComponent<TMP_Text>(); // timed question
+        TMP_Text score = readypage.transform.Find("Saved Score").GetComponent<TMP_Text>();
+        count.text = $"{QAs.Count}";
+        timed.text = (isTimed) ? ("YES") : ("NO");
+        score.text = $"Saved Score {this.score}/{QAs.Count}";
 
         bool isReady = await ReadyQuiz(); // ask before proceeding
         if (isReady)
