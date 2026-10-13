@@ -9799,6 +9799,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3925934479963633849, guid: d09b75314c4902a4ba60b4900106840e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 9.91
+      objectReference: {fileID: 0}
+    - target: {fileID: 7152496488731449613, guid: d09b75314c4902a4ba60b4900106840e, type: 3}
+      propertyPath: m_Name
+      value: Descriptor
+      objectReference: {fileID: 0}
     - target: {fileID: 2638524482564741483, guid: b521cdb22816602448582114edbcad61, type: 3}
       propertyPath: 'dialogue.Array.data[0]'
       value: To proceed, try solving those terminals.
@@ -9842,14 +9850,6 @@ PrefabInstance:
     - target: {fileID: 3925934479963633849, guid: b521cdb22816602448582114edbcad61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3925934479963633849, guid: d09b75314c4902a4ba60b4900106840e, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 9.91
-      objectReference: {fileID: 0}
-    - target: {fileID: 7152496488731449613, guid: d09b75314c4902a4ba60b4900106840e, type: 3}
-      propertyPath: m_Name
-      value: Descriptor
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

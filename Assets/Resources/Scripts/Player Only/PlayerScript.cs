@@ -32,8 +32,6 @@ public class PlayerInteract : MonoBehaviour
     public CharacterController characterController;
     public MobileController mobileController;
     public Animator animator;
-
-
     // </Movement>
 
 

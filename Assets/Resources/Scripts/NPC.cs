@@ -28,7 +28,6 @@ public class NPC : MonoBehaviour
         /* Generic
         npcSprite = GetComponent<Renderer>();
         animator = GetComponent<Animator>();*/
-
     }
 
     public void Update()
@@ -47,7 +46,14 @@ public class NPC : MonoBehaviour
         }
     }
 
-    public virtual void Interact() {}
+    public virtual void Interact() {
+        /*
+        Transform p = PlayerInteract.PLAYER.transform.Find("Player Sprite");
+        SpriteRenderer s = p.GetComponent<SpriteRenderer>();
+        Debug.Log(p + " " + s);
+             if (p.position.x > transform.position.x) { s.flipX = false; }
+        else if (p.position.x < transform.position.x) { s.flipX = true;  }*/
+    }
 
     public virtual void Speak(string msg) {
         Speak(msg, false);

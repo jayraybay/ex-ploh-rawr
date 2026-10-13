@@ -24,6 +24,8 @@ public class ExplainerInteract : NPC
 
     public override void Interact()
     {
+        base.Interact();
+
         // First-Line
         index = 0;
         Speak(dialogue[index], true);

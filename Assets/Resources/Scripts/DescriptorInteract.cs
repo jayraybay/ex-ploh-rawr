@@ -21,6 +21,8 @@ public class DescriptorInteract : NPC
 
     public override void Interact()
     {
+        base.Interact();
+
         if (index >= dialogue.Count) index = 0;
         Speak(dialogue[index]);
         index++;
