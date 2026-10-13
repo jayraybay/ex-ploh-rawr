@@ -243,7 +243,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExplainerInteract
   isEntity: 1
-  canSkip: 0
+  canSkip: 1
   npcSprite: {fileID: 3302971511590771972}
   animatorController: {fileID: 9100000, guid: 4d9825f7a35cedf449abd22fe415a69c, type: 2}
   animator: {fileID: 6092015714938018670}

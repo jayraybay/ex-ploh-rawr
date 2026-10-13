@@ -25,6 +25,10 @@ public class NPC : MonoBehaviour
         npcSprite = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();*/
 
+        /* Generic
+        npcSprite = GetComponent<Renderer>();
+        animator = GetComponent<Animator>();*/
+
     }
 
     public void Update()
@@ -37,11 +41,18 @@ public class NPC : MonoBehaviour
             PlayerInteract.UI_DIALOGUE.text = currentMsg;
             PlayerInteract.UI_INTERACT.enabled = true;
             currentMsg = null;
+
+            PlayerInteract.UI_JOYSTICK.gameObject.SetActive(true);
+            PlayerInteract.UI_INTERACT.gameObject.SetActive(true);
         }
     }
 
     public virtual void Interact() {}
+
     public virtual void Speak(string msg) {
+        Speak(msg, false);
+    }
+    public virtual void Speak(string msg, bool isExplained) {
         var dialogue = GameObject.Find("Dialogue Text");
         var content = dialogue.GetComponent<TMP_InputField>();
         //content.text = msg;
@@ -52,15 +63,16 @@ public class NPC : MonoBehaviour
 
         currentMsg = msg;
         //StartCoroutine(TypeSentence(msg, 0.01f));
-        StartCoroutine(TypeSentence(msg, 0.01f));
+        StartCoroutine(TypeSentence(msg, 0.01f, isExplained));
     }
 
-    IEnumerator TypeSentence(string sentence, float cps)
+    IEnumerator TypeSentence(string sentence, float cps, bool isExplained)
     {
         var dialogue = GameObject.Find("Dialogue Text");
         var content = dialogue.GetComponent<TMP_InputField>();
         PlayerInteract.UI_INTERACT.gameObject.SetActive(false);
         PlayerInteract.UI_JOYSTICK.gameObject.SetActive(false);
+
 
         content.text = "";
         foreach (char letter in sentence.ToCharArray())
@@ -73,8 +85,17 @@ public class NPC : MonoBehaviour
             content.text += letter;
             yield return new WaitForSeconds(cps);
         }
-        PlayerInteract.UI_INTERACT.gameObject.SetActive(true);
-        PlayerInteract.UI_JOYSTICK.gameObject.SetActive(true);
+
+        if (!isExplained)
+        {
+            PlayerInteract.UI_INTERACT.gameObject.SetActive(true);
+            PlayerInteract.UI_JOYSTICK.gameObject.SetActive(true);
+
+            PlayerInteract.UI_DIALOGUE_PREV.gameObject.SetActive(false);
+            PlayerInteract.UI_DIALOGUE_NEXT.gameObject.SetActive(false);
+        }
+
+
     }
 
 }

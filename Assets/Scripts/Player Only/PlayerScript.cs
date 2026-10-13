@@ -21,6 +21,7 @@ public class PlayerInteract : MonoBehaviour
     public static TMP_InputField UI_DIALOGUE;
     public static Image UI_JOYSTICK;
     public static Camera PLAYER_CAMERA;
+    public static Button UI_DIALOGUE_PREV, UI_DIALOGUE_NEXT;
     // </Static>
 
 
@@ -62,6 +63,8 @@ public class PlayerInteract : MonoBehaviour
         PlayerInteract.UI_DIALOGUE = inputField;
         PlayerInteract.UI_JOYSTICK = GameObject.FindGameObjectWithTag("UI_Joystick").GetComponent<Image>();
         PlayerInteract.PLAYER_CAMERA = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+        PlayerInteract.UI_DIALOGUE_PREV = GameObject.FindGameObjectWithTag("UI_DialoguePrev").GetComponent<Button>();
+        PlayerInteract.UI_DIALOGUE_NEXT = GameObject.FindGameObjectWithTag("UI_DialogueNext").GetComponent<Button>();
 
         //GameObject.FindGameObjectWithTag("Canvas_Terminal").GetComponent<Canvas>().enabled = false;
         GameObject.Find("Terminal Multiple").GetComponent<Canvas>().enabled = false;
@@ -70,8 +73,11 @@ public class PlayerInteract : MonoBehaviour
         GameObject.Find("Terminal Ready").GetComponent<Canvas>().enabled = false;
         GameObject.Find("Terminal Results").GetComponent<Canvas>().enabled = false;
 
+
         // ...
         GameObject.FindGameObjectWithTag("Canvas_Player").GetComponent<Canvas>().enabled = true;
+        PlayerInteract.UI_DIALOGUE_PREV.gameObject.SetActive(false);
+        PlayerInteract.UI_DIALOGUE_NEXT.gameObject.SetActive(false);
     }
 
     void Update()
@@ -120,11 +126,33 @@ public class PlayerInteract : MonoBehaviour
             if (target.GetComponent<NPC>() != null) NPCscript = target.GetComponent<NPC>();
             buttonInteract.onClick.AddListener(NPCscript.Interact);
             buttonInteract.interactable = true;
+
+            // When it's Explainer; important NPC-type
+            if (NPCscript.GetType() == typeof(ExplainerInteract)) {
+                Button interact = GameObject.FindGameObjectWithTag("UI_Interact").GetComponent<Button>();
+                interact.enabled = true;
+
+                UI_DIALOGUE_PREV.onClick.AddListener( ((ExplainerInteract) NPCscript).SayPrev);
+                UI_DIALOGUE_NEXT.onClick.AddListener( ((ExplainerInteract) NPCscript).SayNext);
+            }
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
+        if (NPCscript == null) return;
+
+        if (NPCscript.GetType() == typeof(ExplainerInteract))
+        {
+            UI_DIALOGUE_PREV.onClick.RemoveListener(((ExplainerInteract) NPCscript).SayPrev);
+            UI_DIALOGUE_NEXT.onClick.RemoveListener(((ExplainerInteract) NPCscript).SayNext);
+            UI_INTERACT.gameObject.SetActive(true);
+
+            UI_DIALOGUE_PREV.gameObject.SetActive(false);
+            UI_DIALOGUE_NEXT.gameObject.SetActive(false);
+        }
+
+
         target = null;
         buttonInteract.interactable = false;
 
@@ -138,6 +166,7 @@ public class PlayerInteract : MonoBehaviour
         var image = dialogue.GetComponent<Image>();
         image.enabled = false;
         content.enabled = false;
+
     }
 
 

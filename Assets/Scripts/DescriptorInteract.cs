@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ExplainerInteract : NPC
+public class DescriptorInteract : NPC
 {
     [SerializeField]
     public List<String> dialogue = new List<String>();
