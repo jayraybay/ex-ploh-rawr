@@ -11,13 +11,18 @@ public class MainMenu : MonoBehaviour
     private AudioSource audioSource;
     private Canvas settings;
     private Canvas main;
+    private Canvas play;
     private SpriteRenderer genderSprite;
     private SpriteRenderer shadowblob;
+
+    private bool isPlaying = false;
+
+    // i know its spaghetti code because this script is being used from different GameObjects, but it works (and regret later)
 
     void Start()
     {
         string gender = PlayerPrefs.GetString("PlayerGender");
-        Animator animator = transform.GetChild(8).GetComponent<Animator>();
+        Animator animator = GameObject.Find("Gender Sprite").GetComponent<Animator>();
 
              if (gender == "M") animator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Animations/PlayerMale_Controller");
         else if (gender == "F") animator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Animations/PlayerFemale_Controller");
@@ -35,16 +40,39 @@ public class MainMenu : MonoBehaviour
         //ui
         settings = GameObject.Find("SettingsCanvas").GetComponent<Canvas>();
         main = GameObject.Find("MainCanvas").GetComponent<Canvas>();
+        play = GameObject.Find("ContinueCanvas").GetComponent<Canvas>();
         genderSprite = GameObject.Find("Gender Sprite").GetComponent<SpriteRenderer>();
         shadowblob = GameObject.Find("Shadow Blob").GetComponent<SpriteRenderer>();
     }
 
+    // Cancel Tutorial/Continue Page
+    public void ClickCancel() {
+        genderSprite.gameObject.SetActive(true);
+        main.enabled = true;
+        play.enabled = false;
+    }
     
     public void ClickPlay() {
-        Debug.Log("Clicked Play");
-        audioSource.Play();
-        StartCoroutine(DramaticWait());
+        genderSprite.gameObject.SetActive(false);
+        main.enabled = false;
+        play.enabled = true;
     }
+
+    public void ClickTutorial() {
+        Debug.Log("Clicked Tutorial");
+        //SceneManager.LoadScene("Tutorial");
+
+    }
+
+    public void ClickContinue()
+    {
+        Debug.Log("Clicked Continue");
+        if (!isPlaying) {
+            audioSource.Play();
+            StartCoroutine(DramaticWait());
+        }
+    }
+
     private IEnumerator DramaticWait() //coroutine
     {
         Debug.Log("Waiting for 5 seconds before loading the scene...");
@@ -61,10 +89,14 @@ public class MainMenu : MonoBehaviour
 
     public void ClickQuit()
     {
+        // research about how to make the app quit based on OS (Android/iOS/etc.)
+
         Debug.Log("Clicked Quit");
         audioSource.Play();
-        Application.Quit();
-        
+        UnityEditor.EditorApplication.isPlaying = false; // only applies to Unity Editor
+        Application.Quit(); // violates Apple's HCI, they prefer via home gestures
+        // Activity.moveTaskToBack for Android
+
     }
 
     public void ClickSettings() {
