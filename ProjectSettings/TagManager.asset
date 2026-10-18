@@ -14,6 +14,12 @@ TagManager:
   - Canvas_Terminal_Ready
   - UI_DialoguePrev
   - UI_DialogueNext
+  - UI_Pause
+  - MG_CodeLine
+  - UI_Attack
+  - Prop
+  - Inv_Wall
+  - Tower
   layers:
   - Default
   - TransparentFX

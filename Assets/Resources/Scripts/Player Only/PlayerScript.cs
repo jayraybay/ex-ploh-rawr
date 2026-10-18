@@ -1,6 +1,7 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PlayerInteract : MonoBehaviour
@@ -54,33 +55,40 @@ public class PlayerInteract : MonoBehaviour
         transform.position = new Vector3(x, y, z);
 
 
-        buttonInteract = GameObject.FindGameObjectWithTag("UI_Interact").GetComponent<Button>();
-        inputField = GameObject.FindGameObjectWithTag("UI_Dialogue").GetComponent<TMP_InputField>();
+        // only in Non-Minigame, InGame-Scene
 
-        PlayerInteract.UI_INTERACT = buttonInteract;
-        PlayerInteract.UI_DIALOGUE = inputField;
-        PlayerInteract.UI_JOYSTICK = GameObject.FindGameObjectWithTag("UI_Joystick").GetComponent<Image>();
-        PlayerInteract.PLAYER_CAMERA = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
-        PlayerInteract.UI_DIALOGUE_PREV = GameObject.FindGameObjectWithTag("UI_DialoguePrev").GetComponent<Button>();
-        PlayerInteract.UI_DIALOGUE_NEXT = GameObject.FindGameObjectWithTag("UI_DialogueNext").GetComponent<Button>();
+        if (SceneManager.GetActiveScene().name == "InGame") {
+            buttonInteract = GameObject.FindGameObjectWithTag("UI_Interact").GetComponent<Button>();
+            inputField = GameObject.FindGameObjectWithTag("UI_Dialogue").GetComponent<TMP_InputField>();
 
-        //GameObject.FindGameObjectWithTag("Canvas_Terminal").GetComponent<Canvas>().enabled = false;
-        GameObject.Find("Terminal Multiple").GetComponent<Canvas>().enabled = false;
-        GameObject.Find("Terminal Identify").GetComponent<Canvas>().enabled = false;
-        GameObject.Find("Terminal Trivia").GetComponent<Canvas>().enabled = false;
-        GameObject.Find("Terminal Ready").GetComponent<Canvas>().enabled = false;
-        GameObject.Find("Terminal Results").GetComponent<Canvas>().enabled = false;
+            PlayerInteract.UI_INTERACT = buttonInteract;
+            PlayerInteract.UI_DIALOGUE = inputField;
+            PlayerInteract.UI_JOYSTICK = GameObject.FindGameObjectWithTag("UI_Joystick").GetComponent<Image>();
+            PlayerInteract.PLAYER_CAMERA = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
 
+            PlayerInteract.UI_DIALOGUE_PREV = GameObject.FindGameObjectWithTag("UI_DialoguePrev").GetComponent<Button>();
+            PlayerInteract.UI_DIALOGUE_NEXT = GameObject.FindGameObjectWithTag("UI_DialogueNext").GetComponent<Button>();
 
-        // ...
+            //GameObject.FindGameObjectWithTag("Canvas_Terminal").GetComponent<Canvas>().enabled = false;
+            GameObject.Find("Terminal Multiple").GetComponent<Canvas>().enabled = false;
+            GameObject.Find("Terminal Identify").GetComponent<Canvas>().enabled = false;
+            GameObject.Find("Terminal Trivia").GetComponent<Canvas>().enabled = false;
+            GameObject.Find("Terminal Ready").GetComponent<Canvas>().enabled = false;
+            GameObject.Find("Terminal Results").GetComponent<Canvas>().enabled = false;
+
+            PlayerInteract.UI_DIALOGUE_PREV.gameObject.SetActive(false);
+            PlayerInteract.UI_DIALOGUE_NEXT.gameObject.SetActive(false);
+        }
+        
         GameObject.FindGameObjectWithTag("Canvas_Player").GetComponent<Canvas>().enabled = true;
-        PlayerInteract.UI_DIALOGUE_PREV.gameObject.SetActive(false);
-        PlayerInteract.UI_DIALOGUE_NEXT.gameObject.SetActive(false);
     }
 
     void Update()
     {
-        transform.Find("Player Sprite").GetComponent<SpriteRenderer>().transform.rotation = Quaternion.LookRotation(PLAYER_CAMERA.transform.forward);
+
+        try {
+            transform.Find("Player Sprite").GetComponent<SpriteRenderer>().transform.rotation = Quaternion.LookRotation(PLAYER_CAMERA.transform.forward);
+        } catch (NullReferenceException err) {} // probably you've set the rotation manually on Inspector...
         CharacterMove();
         //Debug.Log(target);
     }
@@ -165,6 +173,24 @@ public class PlayerInteract : MonoBehaviour
         image.enabled = false;
         content.enabled = false;
 
+    }
+
+    public void ForceExit()
+    {         // This function is called by the Teleporter script to force the player to exit an NPC interaction
+        target = null;
+        buttonInteract.interactable = false;
+        if (NPCscript != null)
+        {
+            buttonInteract.onClick.RemoveListener(NPCscript.Interact);
+        }
+        NPCscript = null;
+        hasTriggered = false;
+        var dialogue = GameObject.Find("Dialogue Text");
+        var content = dialogue.GetComponent<TMP_InputField>();
+        content.text = "";
+        var image = dialogue.GetComponent<Image>();
+        image.enabled = false;
+        content.enabled = false;
     }
 
 

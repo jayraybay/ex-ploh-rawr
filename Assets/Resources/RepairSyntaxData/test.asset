@@ -1,0 +1,86 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: feb9b0879923163488f5d0eb5a90d894, type: 3}
+  m_Name: test
+  m_EditorClassIdentifier: Assembly-CSharp::RepairSyntaxData
+  Name: test
+  waves:
+  - waveName: test 1
+    codeLines:
+    - hasSyntaxError: 0
+      brokenCode: 
+      originalCode: int score = 10;
+      tokenChoices: []
+      incorrectToken: 
+      correctAnswer: 
+    - hasSyntaxError: 1
+      brokenCode: int totalScore = "20";
+      originalCode: int totalScore = 20;
+      tokenChoices:
+      - int
+      - totalScore
+      - =
+      - '"20";'
+      incorrectToken: '"20";'
+      correctAnswer: 20;
+    - hasSyntaxError: 1
+      brokenCode: pritn(score);
+      originalCode: System.out.print(score);
+      tokenChoices:
+      - pritn
+      - ()
+      - score
+      incorrectToken: pritn
+      correctAnswer: System.out.print
+    - hasSyntaxError: 0
+      brokenCode: 
+      originalCode: 'System.out.println("Your grade is " + score + "/" + totalScore);
+
+'
+      tokenChoices: []
+      incorrectToken: 
+      correctAnswer: 
+  - waveName: test 1
+    codeLines:
+    - hasSyntaxError: 0
+      brokenCode: 
+      originalCode: int score = 10;
+      tokenChoices: []
+      incorrectToken: 
+      correctAnswer: 
+    - hasSyntaxError: 1
+      brokenCode: 
+      originalCode: int totalScore = "20";
+      tokenChoices:
+      - int
+      - totalScore
+      - =
+      - '"20";'
+      incorrectToken: '"20";'
+      correctAnswer: 20;
+    - hasSyntaxError: 1
+      brokenCode: 
+      originalCode: pritn(score);
+      tokenChoices:
+      - pritn
+      - ()
+      - score
+      incorrectToken: pritn
+      correctAnswer: System.out.print
+    - hasSyntaxError: 0
+      brokenCode: 
+      originalCode: 'System.out.println("Your grade is " + score + "/" + totalScore);
+
+'
+      tokenChoices: []
+      incorrectToken: 
+      correctAnswer: 

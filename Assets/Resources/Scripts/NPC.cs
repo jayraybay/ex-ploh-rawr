@@ -14,12 +14,15 @@ public class NPC : MonoBehaviour
     public bool isEntity; // when interacted, this NPC face the player
     public bool canSkip; // can skip dialogue
 
+    // Stupid solution for towers and 3D models
+    public bool isModel;
+
     public SpriteRenderer npcSprite;
     public AnimatorController animatorController;
     public Animator animator; // unused in Inspector
     private string currentMsg; // when currently in dialogue; null means not in dialogue
 
-    public void Start()
+    public virtual void Start()
     {
         /* Depends on derived classes
         npcSprite = GetComponent<SpriteRenderer>();
@@ -30,10 +33,11 @@ public class NPC : MonoBehaviour
         animator = GetComponent<Animator>();*/
     }
 
-    public void Update()
+    public virtual void Update()
     {
         // Look at the camera, depends on derived class
-        transform.rotation = Quaternion.LookRotation(PlayerInteract.PLAYER_CAMERA.transform.forward);
+        if (!isModel) transform.rotation = Quaternion.LookRotation(PlayerInteract.PLAYER_CAMERA.transform.forward);
+
 
         if (currentMsg != null && Input.GetMouseButton(0) && canSkip) {
             StopAllCoroutines();
