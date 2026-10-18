@@ -36,7 +36,13 @@ public class NPC : MonoBehaviour
     public virtual void Update()
     {
         // Look at the camera, depends on derived class
-        if (!isModel) transform.rotation = Quaternion.LookRotation(PlayerInteract.PLAYER_CAMERA.transform.forward);
+        if (!isModel) {
+            try {
+                transform.rotation = Quaternion.LookRotation(PlayerInteract.PLAYER_CAMERA.transform.forward);
+            } catch (NullReferenceException) { // for some reason, in Minigame
+            }
+        
+        }
 
 
         if (currentMsg != null && Input.GetMouseButton(0) && canSkip) {

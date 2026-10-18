@@ -57,7 +57,7 @@ public class PlayerInteract : MonoBehaviour
 
         // only in Non-Minigame, InGame-Scene
 
-        if (SceneManager.GetActiveScene().name == "InGame") {
+        if (SceneManager.GetActiveScene().name == "InGame" || SceneManager.GetActiveScene().name == "Tutorial") {
             buttonInteract = GameObject.FindGameObjectWithTag("UI_Interact").GetComponent<Button>();
             inputField = GameObject.FindGameObjectWithTag("UI_Dialogue").GetComponent<TMP_InputField>();
 
@@ -70,14 +70,17 @@ public class PlayerInteract : MonoBehaviour
             PlayerInteract.UI_DIALOGUE_NEXT = GameObject.FindGameObjectWithTag("UI_DialogueNext").GetComponent<Button>();
 
             //GameObject.FindGameObjectWithTag("Canvas_Terminal").GetComponent<Canvas>().enabled = false;
-            GameObject.Find("Terminal Multiple").GetComponent<Canvas>().enabled = false;
-            GameObject.Find("Terminal Identify").GetComponent<Canvas>().enabled = false;
-            GameObject.Find("Terminal Trivia").GetComponent<Canvas>().enabled = false;
-            GameObject.Find("Terminal Ready").GetComponent<Canvas>().enabled = false;
-            GameObject.Find("Terminal Results").GetComponent<Canvas>().enabled = false;
-
-            PlayerInteract.UI_DIALOGUE_PREV.gameObject.SetActive(false);
-            PlayerInteract.UI_DIALOGUE_NEXT.gameObject.SetActive(false);
+            
+            // do we need terminals at the Tutorial-Scene? if so, copy from the InGame-Scene
+            if (SceneManager.GetActiveScene().name == "InGame") {
+                GameObject.Find("Terminal Multiple").GetComponent<Canvas>().enabled = false;
+                GameObject.Find("Terminal Identify").GetComponent<Canvas>().enabled = false;
+                GameObject.Find("Terminal Trivia").GetComponent<Canvas>().enabled = false;
+                GameObject.Find("Terminal Ready").GetComponent<Canvas>().enabled = false;
+                GameObject.Find("Terminal Results").GetComponent<Canvas>().enabled = false;
+                PlayerInteract.UI_DIALOGUE_PREV.gameObject.SetActive(false);
+                PlayerInteract.UI_DIALOGUE_NEXT.gameObject.SetActive(false);
+            }
         }
         
         GameObject.FindGameObjectWithTag("Canvas_Player").GetComponent<Canvas>().enabled = true;
@@ -130,6 +133,7 @@ public class PlayerInteract : MonoBehaviour
             //Debug.Log(target.name);
             NPCscript = target.GetComponent<NPC>();
             if (target.GetComponent<NPC>() != null) NPCscript = target.GetComponent<NPC>();
+
             buttonInteract.onClick.AddListener(NPCscript.Interact);
             buttonInteract.interactable = true;
 
