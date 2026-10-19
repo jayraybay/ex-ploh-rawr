@@ -13,7 +13,7 @@ ModelImporter:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: Vase1
-    second: {fileID: 2800000, guid: 2a5a5bfe8ba5839449bd302f8a370f08, type: 3}
+    second: {fileID: 2800000, guid: 999222fcc5e110447bbb751610cf20fc, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
