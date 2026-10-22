@@ -185,11 +185,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::OBJ_CMD
   isEntity: 0
   canSkip: 0
+  isModel: 0
   npcSprite: {fileID: 0}
   animatorController: {fileID: 0}
   animator: {fileID: 5262474850235155306}
-  QAs: []
   isTimed: 0
+  QAs: []
+  score: 0
   references:
     version: 2
     RefIds: []

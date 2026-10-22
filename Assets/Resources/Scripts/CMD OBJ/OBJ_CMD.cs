@@ -1,27 +1,62 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
+
+
+[Serializable]
+public enum QuestionSeverity {
+    Activity,
+    Quiz,
+    Exam
+}
+
+
+[Serializable]
+public enum QuestionType {
+    Multiple,
+    Identify,
+    Fact
+}
+
+[Serializable]
+public class Content {
+    public int index;
+    public QuestionType type;
+}
 
 public class OBJ_CMD : NPC
 {
+
     // Inspector elements
     public bool isTimed = false;
-
     /*
         When Timed:
             Choices = 7.5s
             Identify = 10s
             Fact = 5s
      */
-
+    public QuestionSeverity severity;
 
     [SerializeReference]
     [SubclassSelector]
-    public List<QA> QAs = new List<QA>();
+    public List<QA> QAs = new List<QA>(); // Don't use this in Inspector! Use the list "contents" instead.
+
+    [SerializeReference]
+    [SubclassSelector]
+    public List<Content> contents = new List<Content>();
+    /*
+        ^^^ Explanation ^^^
+        Index is used for getting the question from Database (namely "Indicate", not "Index" because it's a MySQL reserved-keyword)
+        Type is used what type of question, especially useful when it comes to Multiple-Choices. More on later when it comes to Tags.
+        Severity is just Activity/Quiz/Exam..
+     */
 
     // Don't touch it
     public int score = 0;
@@ -29,13 +64,85 @@ public class OBJ_CMD : NPC
     public new void Start()
     {
         isEntity = false;
+        if (contents.Count >= 1) StartCoroutine(GetQuestions());
     }
 
     public new void Update() {
         transform.Find("Square").GetComponent<SpriteRenderer>().transform.rotation = Quaternion.LookRotation(PlayerInteract.PLAYER_CAMERA.transform.forward);
     }
 
-   TaskCompletionSource<bool> quizRespond = new TaskCompletionSource<bool>();
+    IEnumerator GetQuestions()
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("username", "PlayerOne");
+
+        using (UnityWebRequest www = UnityWebRequest.Post("http://localhost/Explorer/get_questions.php", form))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError("Error: " + www.error);
+            }
+            else
+            {
+                Debug.Log("Server Response: " + www.downloadHandler.text);
+                ParseContent(www.downloadHandler.text);
+            }
+        }
+
+    }
+
+
+    public void ParseContent(string data)
+    {
+        // get all questions
+        string[] questions = data.Split(new char[] { '\n' }, System.StringSplitOptions.RemoveEmptyEntries);
+
+        List<QA> newQAs = new List<QA>();
+
+        /* Highly inefficient but okay ... */
+
+        // Get all questions based on provided list of Index
+        List<string> potential_questions = new List<string>();
+        for (int i = 0; i < questions.Length; i++) {
+            if (contents.Any(u => u.index - 1 == i)) { // minus one because the AUTO_INCREMENT starts at one (1)
+                potential_questions.Add(questions[i]);
+            }
+        
+        }
+
+        foreach (string q in potential_questions)
+        {
+            string[] fields = q.Split('|');
+            Debug.Log(q); // FIXED! MAKE SURE YOUR VARCHAR DOESN'T HAVE NEW LINES FOR NO REASON
+            //Debug.Log(fields[0] + " | " + fields[1] + " | " + fields[2] + " | " + fields[3]);
+
+            if (fields.Length >= 4) // [0] Index, [1] Activity, [2] Quiz, [3] Exam, [4] Answer, [5] Tag
+            {
+                //int index = Convert.ToInt32(fields[0]);
+                string question, answer;
+                switch (this.severity)
+                {
+                    case QuestionSeverity.Activity: question = fields[1]; break;
+                    case QuestionSeverity.Quiz:     question = fields[2]; break;
+                    case QuestionSeverity.Exam:     question = fields[3]; break;
+                    default: return; // never happens
+                }
+                answer = fields[4];
+                //tag = fields[5];
+
+                // Implement when it comes to Choice/Fact
+                newQAs.Add( new Identify(question, answer, false) );
+            }
+
+        }
+        //return newQA;
+        QAs = newQAs;
+    }
+
+
+    TaskCompletionSource<bool> quizRespond = new TaskCompletionSource<bool>();
 
     public async override void Interact() {
 

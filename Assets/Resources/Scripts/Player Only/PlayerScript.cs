@@ -176,7 +176,6 @@ public class PlayerInteract : MonoBehaviour
         var image = dialogue.GetComponent<Image>();
         image.enabled = false;
         content.enabled = false;
-
     }
 
     public void ForceExit()
@@ -204,10 +203,6 @@ public class PlayerInteract : MonoBehaviour
 
     public void ToggleInteraction(bool here) {
         PlayerInteract.UI_INTERACT.gameObject.SetActive(here);
-    }
-
-    public void TogglePlayerUI(bool here) {
-        
     }
 
 

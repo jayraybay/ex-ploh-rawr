@@ -1,27 +1,4 @@
 using System;
-using UnityEngine;
-
-
-/**
- * 
- * S  : 100%
- * A+ : 95
- * A  : 
- * A- : 
- * B+ : 
- * B  : 
- * B- : 60%
- * C+ : 40%
- * C  : 
- * C- : 
- * D+ : 
- * D  : 
- * D- : 
- * F  : 60%
- * 
- * 
- * 
- */
 
 // Abstract class, don't use the QA class!
 [Serializable]
