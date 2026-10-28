@@ -24,9 +24,11 @@ public class MainMenu : MonoBehaviour
     {
         if (PlayerPrefs.GetString("AccountID") == "")
         {
-            DBC.IS_GUEST_MODE = true;
-            PlayerPrefs.SetString("PlayerGender", "N");
-            PlayerPrefs.SetString("PlayerName", "");
+            //DBC.IS_GUEST_MODE = true;
+            //PlayerPrefs.SetString("PlayerGender", "N");
+            //PlayerPrefs.SetString("PlayerName", "");
+
+            SceneManager.LoadScene("Login");
         }
         else {
             DBC.IS_GUEST_MODE = false;

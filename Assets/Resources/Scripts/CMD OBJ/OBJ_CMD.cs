@@ -76,7 +76,12 @@ public class OBJ_CMD : NPC
         WWWForm form = new WWWForm();
         form.AddField("username", "PlayerOne");
 
-        using (UnityWebRequest www = UnityWebRequest.Post("http://localhost/Explorer/get_questions.php", form))
+
+        // http://localhost/Explorer/php%20stuffs/game_get_questions.php
+        DBC.IP_ADDRESS = PlayerPrefs.GetString("IPaddress");
+        Debug.Log(DBC.IP_ADDRESS);
+
+        using (UnityWebRequest www = UnityWebRequest.Post($"http://192.168.1.8/Explorer/php%20stuffs/game_get_questions.php", form))
         {
             yield return www.SendWebRequest();
 
